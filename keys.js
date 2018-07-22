@@ -11,3 +11,9 @@ exports.spotify = {
   id: process.env.SPOTIFY_ID,
   secret: process.env.SPOTIFY_SECRET
 };
+
+
+
+
+//spotify: client ID: BK3RLBpzwiphoTetk2FdfRD4vzV1KkLEYnmvTcC1xViZv
+//sptify client secret 41d738fc047f4e5d9a2ad4744f30d4a4

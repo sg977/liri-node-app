@@ -1,6 +1,31 @@
+//using dotenv to hide keys 
 require("dotenv").config();
+
+//declare global variables 
+var keys = require('./keys');
+var fs = require('fs');
+var request = require ('request');
+var twitter = require('twitter');
+var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
-var client = new Twitter(keys.twitter);
+var client = new twitter(keys.twitter);
+
+
+//store all comments to arguments 
+var command = process.argv[2];
+var nodeArgv = process.argv; 
+
+//movie or song input 
+var input = "";
+
+//attach multiple words arguments 
+for (var i=3; i<nodeArgv.length; i++){
+    if (i>3 && i<nodeArgv.length){
+        input = input + "+" + nodeArgv[i];
+    } else {
+        input = input + nodeArgv[i];
+    }
+    }
 
 
 
@@ -11,6 +36,95 @@ var client = new Twitter(keys.twitter);
 //node liri.js do-what-it-says: it should run spotify-this-song for "I Want it That Way", as follows the text in random text
 
 
+//using switch to change comments 
+switch (command) {
+    case "my-tweets":
+    myTweets();
+    break;
 
-//spotify: client ID: BK3RLBpzwiphoTetk2FdfRD4vzV1KkLEYnmvTcC1xViZv
-//sptify client secret 41d738fc047f4e5d9a2ad4744f30d4a4
+    case "spotify-this-song":
+    if (input){
+        spotifyThisSong(input);
+    } else {
+        spotifyThisSong("Fluprescent Adolescent");
+    }
+    break;
+
+    case "movie-this":
+    if (input){
+        movieThis(input); 
+    } else {
+        movieThis("Mr.Nobody")
+    }
+
+    break;
+
+    case "do-waht-it-says":
+    doWhatItSays();
+    break;
+
+    //instructions for first-time user looking around on the commend line
+    default: 
+    console.log("\n"+ "type commend after 'node liri.js': " + "\n" +
+    "my-tweets"+ "\n" +
+    "spoty-this-song 'any song title' " + "\n" +
+    "movie-this 'any movie title' " + "\n" +
+    "do-what-it-says " + "\n" + "use quptes for multiword titles!"); 
+    break; 
+}
+
+//tweeter npm package 
+function myTweets(){
+    //display last 20 tweets 
+    var params = {screen_name: 'CocoGuo5'};
+    client.get('statuses/user_timeline',params, function(error, tweets, response){
+        if(!error) {
+            for (var i=0; i<tweets.length; i++) {
+                var date = tweets[i].created_at;
+                //console.log(tweets[i].text); 
+                
+                console.log("@CocoGuo5: " + tweets[i].text + " Created At: " + date.substring(0,19));
+                console.log("------------------------------------------");
+
+                //adds text to log.txt file
+                fs.appendFile('log.txt', "@CocoGuo5: " + tweets[i].text + " Created At: " + date.substring(0, 19));
+                fs.appendFile('log.txt', "-----------------------");
+            };
+        } else {
+            console.log("Error occured");
+           // return; 
+        }
+    } );
+}
+
+//node-spotify-api
+function spotifyThisSong(song){
+    spotify.search({type:'track', query: song}, function(error, data){
+        console.log(data);
+        // if(!error){
+        //     for(var i=0; i<data.tracks.items.length;i++){
+        //         var songData = data.track.items[i];
+        //         console.log(songData); 
+        //         //artist
+        //         console.log("Artist: " + songData.artists[0].name);
+        //         //song name
+        //         console.log("Song: " + songData.name);
+        //         //spotify preview link
+        //         console.log("Preview URL: " + songData.preview_url);
+        //         //album name 
+        //         console.log("Album: " + songData.album.name);
+        //         cosnole.log("--------------------------------");
+        //          //adds text to log.txt
+        //         fs.appendFile('log.txt', songData.artists[0].name);
+        //         fs.appendFile('log.txt', songData.name);
+        //         fs.appendFile('log.txt', songData.preview_url);
+        //         fs.appendFile('log.txt', songData.album.name);
+        //         fs.appendFile('log.txt', "-----------------------");              
+
+        //     }
+        // } else {
+        //     console.log('Error occurred.'); 
+        // }
+    });
+}
+
