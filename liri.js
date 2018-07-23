@@ -79,7 +79,7 @@ function myTweets(){
     var params = {screen_name: 'CocoGuo5'};
     client.get('statuses/user_timeline',params, function(error, tweets, response){
         if(!error) {
-            for (var i=0; i<tweets.length; i++) {
+            for(var i=0; i<tweets.length; i++) {
                 var date = tweets[i].created_at;
                 //console.log(tweets[i].text); 
                 
@@ -99,12 +99,12 @@ function myTweets(){
 
 //node-spotify-api
 function spotifyThisSong(song){
-    spotify.search({type:'track', query: song}, function(error, data){
+    spotify.search({type:'track', query: input}, function(error, data){
         console.log(data);
         if(!error){
             for(var i=0; i<data.tracks.items.length;i++){
-                var songData = data.track.items[i];
-                console.log(songData); 
+                var songData = data.tracks.items[i];
+                //console.log(songData); 
                 //artist
                 console.log("Artist: " + songData.artists[0].name);
                 //song name
