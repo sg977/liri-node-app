@@ -88,7 +88,7 @@ function myTweets(){
 
                 //adds text to log.txt file
                 fs.appendFile('log.txt', "@CocoGuo5: " + tweets[i].text + " Created At: " + date.substring(0, 19));
-                fs.appendFile('log.txt', "-----------------------");
+                //fs.appendFile('log.txt', "-----------------------");
             };
         } else {
             console.log("Error occured");
@@ -100,7 +100,7 @@ function myTweets(){
 //node-spotify-api
 function spotifyThisSong(song){
     spotify.search({type:'track', query: input}, function(error, data){
-        console.log(data);
+        //console.log(data);
         if(!error){
             for(var i=0; i<data.tracks.items.length;i++){
                 var songData = data.tracks.items[i];
